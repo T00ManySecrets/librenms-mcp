@@ -45,7 +45,10 @@ def register_oxidized_tools(mcp, config):
 
             async with LibreNMSClient(config) as client:
                 path = f"oxidized/{hostname}" if hostname else "oxidized"
-                return await client.get(path)
+                result = await client.get(path)
+                if isinstance(result, list):
+                    return {"devices": result}
+                return result
 
         except Exception as e:
             await ctx.error(f"Error listing Oxidized devices: {e!s}")
@@ -76,7 +79,10 @@ def register_oxidized_tools(mcp, config):
             await ctx.info(f"Getting Oxidized config for {hostname}...")
 
             async with LibreNMSClient(config) as client:
-                return await client.get(f"oxidized/config/{hostname}")
+                result = await client.get(f"oxidized/config/{hostname}")
+                if isinstance(result, list):
+                    return {"configs": result}
+                return result
 
         except Exception as e:
             await ctx.error(f"Error getting Oxidized config for {hostname}: {e!s}")
@@ -112,7 +118,10 @@ def register_oxidized_tools(mcp, config):
             await ctx.info(f"Searching Oxidized configs for '{search}'...")
 
             async with LibreNMSClient(config) as client:
-                return await client.get(f"oxidized/config/search/{search}")
+                result = await client.get(f"oxidized/config/search/{search}")
+                if isinstance(result, list):
+                    return {"results": result}
+                return result
 
         except Exception as e:
             await ctx.error(f"Error searching Oxidized configs: {e!s}")
